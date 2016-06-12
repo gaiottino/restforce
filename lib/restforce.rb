@@ -26,6 +26,7 @@ module Restforce
     autoload :Verbs,          'restforce/concerns/verbs'
     autoload :Base,           'restforce/concerns/base'
     autoload :API,            'restforce/concerns/api'
+    autoload :BatchAPI,       'restforce/concerns/batch_api'
   end
 
   module Data
@@ -41,6 +42,7 @@ module Restforce
   AuthenticationError = Class.new(Error)
   UnauthorizedError   = Class.new(Error)
   APIVersionError     = Class.new(Error)
+  BatchAPIError       = Class.new(Error)
 
   class << self
     # Alias for Restforce::Data::Client.new
