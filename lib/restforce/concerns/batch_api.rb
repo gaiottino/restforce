@@ -21,7 +21,8 @@ module Restforce
           if halt_on_error && body['hasErrors']
             last_error_index = results.rindex { |result| result['statusCode'] != 412 }
             last_error = results[last_error_index]
-            raise BatchAPIError, last_error['result'][0]['errorCode']
+            last_error_result = last_error['result'][0]
+            raise BatchAPIError, "#{last_error_result['errorCode']} #{last_error_result['message']}"
           end
           results.map(&:compact)
         end.flatten
