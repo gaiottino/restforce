@@ -32,7 +32,11 @@ module Restforce
         define_method verb do |*args, &block|
           retries = options[:authentication_retries]
           begin
-            connection.send(verb, *args, &block)
+            started_at = Time.now.to_i
+            response = connection.send(verb, *args, &block)
+            ended_at = Time.now.to_i
+            Rails.logger.debug "$$$ Restforce (#{ended_at - started_at}s) #{verb} #{args[0]}" if defined?(Rails)
+            response
           rescue Restforce::UnauthorizedError
             if retries > 0
               retries -= 1
