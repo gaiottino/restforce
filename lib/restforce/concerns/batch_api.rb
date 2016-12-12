@@ -15,7 +15,12 @@ module Restforce
             batchRequests: requests,
             haltOnError: halt_on_error
           }
+
+          started_at = Time.now.to_i
           response = api_post('composite/batch', properties.to_json)
+          ended_at = Time.now.to_i
+          Rails.logger.info "$$$ Restforce (#{ended_at - started_at}s) batch #{requests.length} requests" if defined?(Rails)
+
           body = response.body
           results = body['results']
           if halt_on_error && body['hasErrors']
