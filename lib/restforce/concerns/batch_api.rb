@@ -19,7 +19,7 @@ module Restforce
           started_at = Time.now.to_i
           json = properties.to_json
           Rails.logger.info "$$$ Payload '#{json}'" if defined?(Rails)
-          response = api_post('composite/batch', json)
+          response = post('/services/apexrest/composite/batch', json)
           ended_at = Time.now.to_i
           Rails.logger.info "$$$ Restforce (#{ended_at - started_at}s) batch #{requests.length} requests" if defined?(Rails)
 
