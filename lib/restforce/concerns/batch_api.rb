@@ -24,6 +24,11 @@ module Restforce
           Rails.logger.info "$$$ Restforce (#{ended_at - started_at}s) batch #{requests.length} requests" if defined?(Rails)
 
           body = response.body
+          if defined?(Rails)
+            Rails.logger.info "$$$$$$$$$$"
+            Rails.logger.info body
+            Rails.logger.info "$$$$$$$$$$"
+          end
           results = body['results']
           if halt_on_error && body['hasErrors']
             last_error_index = results.rindex { |result| result['statusCode'] != 412 }
