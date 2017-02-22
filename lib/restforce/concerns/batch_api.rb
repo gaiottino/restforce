@@ -23,7 +23,7 @@ module Restforce
           ended_at = Time.now.to_i
           Rails.logger.info "$$$ Restforce (#{ended_at - started_at}s) batch #{requests.length} requests" if defined?(Rails)
 
-          body = response.body
+          body = JSON.parse(response.body)
           if defined?(Rails)
             Rails.logger.info "$$$$$$$$$$"
             Rails.logger.info body
