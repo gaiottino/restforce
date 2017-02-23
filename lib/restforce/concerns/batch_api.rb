@@ -10,7 +10,7 @@ module Restforce
       def batch(halt_on_error: false, &block)
         subrequests = Subrequests.new(options)
         yield(subrequests)
-        subrequests.requests.each_slice(25).map do |requests|
+        subrequests.requests.each_slice(100).map do |requests|
           properties = {
             batchRequests: requests,
             haltOnError: halt_on_error
