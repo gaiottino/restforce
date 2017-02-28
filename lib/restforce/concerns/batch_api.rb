@@ -7,10 +7,12 @@ module Restforce
 
       define_verbs :post
 
+      BATCH_SIZE = 100
+
       def batch(halt_on_error: false, &block)
         subrequests = Subrequests.new(options)
         yield(subrequests)
-        subrequests.requests.each_slice(100).map do |requests|
+        subrequests.requests.each_slice(BATCH_SIZE).map do |requests|
           properties = {
             batchRequests: requests,
             haltOnError: halt_on_error
@@ -18,17 +20,17 @@ module Restforce
 
           started_at = Time.now.to_i
           json = properties.to_json
-          Rails.logger.info "$$$ Payload '#{json}'" if defined?(Rails)
+          # Rails.logger.info "$$$ Payload '#{json}'" if defined?(Rails)
           response = post('/services/apexrest/composite/batch', json)
           ended_at = Time.now.to_i
           Rails.logger.info "$$$ Restforce (#{ended_at - started_at}s) batch #{requests.length} requests" if defined?(Rails)
 
           body = JSON.parse(response.body)
-          if defined?(Rails)
-            Rails.logger.info "$$$$$$$$$$"
-            Rails.logger.info body
-            Rails.logger.info "$$$$$$$$$$"
-          end
+          # if defined?(Rails)
+          #   Rails.logger.info "$$$$$$$$$$"
+          #   Rails.logger.info body
+          #   Rails.logger.info "$$$$$$$$$$"
+          # end
           results = body['results']
           if halt_on_error && body['hasErrors']
             last_error_index = results.rindex { |result| result['statusCode'] != 412 }
