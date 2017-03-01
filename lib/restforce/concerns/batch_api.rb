@@ -7,7 +7,7 @@ module Restforce
 
       define_verbs :post
 
-      BATCH_SIZE = 100
+      BATCH_SIZE = 25
 
       def batch(halt_on_error: false, &block)
         subrequests = Subrequests.new(options)
