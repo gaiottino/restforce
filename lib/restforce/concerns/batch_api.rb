@@ -38,7 +38,12 @@ module Restforce
             last_error_result = last_error['result'][0]
             raise BatchAPIError, "#{last_error_result['errorCode']} #{last_error_result['message']}"
           end
-          results.map(&:compact)
+          results.map(&:compact).map do |r|
+            if r['result'] && r['result'].is_a?(Array)
+              r['result'] = r['result'][0]
+            end
+            r
+          end
         end.flatten
       end
 
